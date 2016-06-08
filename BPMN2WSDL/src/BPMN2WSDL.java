@@ -22,13 +22,15 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class BPMN2WSDL {
+	
+	List<String> activityNamen = new ArrayList<String>();
 
 	public BPMN2WSDL() {
 
 	}
 
 	public List<String> getActionFromBPMN() {
-		List<String> activityNamen = new ArrayList<String>();
+		
 
 		try {
 
@@ -105,17 +107,7 @@ public class BPMN2WSDL {
 
 	}
 
-	public void calculate(double allPositivAnswers, double selectedPositives, double allSelected) {
 
-		double precision = (selectedPositives / allSelected) * 100;
-		double recall = (selectedPositives / allPositivAnswers) * 100;
-
-		double fMeasure = (2 * (precision * recall)) / precision + recall;
-
-		System.out.println("Bei der WSDL-Suche sind die Werte: \n Recall: " + recall + "\n Precision: " + precision
-				+ "\n F-Measure: " + fMeasure);
-
-	}
 
 	private static Document loadTestDocument(String url) throws Exception {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -137,7 +129,8 @@ public class BPMN2WSDL {
 			for (int temp = 0; temp < synList.getLength(); temp++) {
 				Node syn = synList.item(temp);
 				NodeList termList = syn.getChildNodes();
-				for (int i = 0; i < termList.getLength(); i++) {
+				if(termList.getLength()>=3){
+				for (int i = 0; i < 3 ; i++) {
 					if (termList.item(i).getNodeType() == Node.ELEMENT_NODE
 							&& termList.item(i).getNodeName().equals("term")
 							&& termList.item(i).getAttributes().getNamedItem("level") == null) {
@@ -146,6 +139,7 @@ public class BPMN2WSDL {
 
 					}
 				}
+			}
 			}
 
 		} catch (Exception e) {

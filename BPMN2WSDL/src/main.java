@@ -14,26 +14,49 @@ public class main {
 		List<String> keyWordList = bpmn.getActionFromBPMN();
 		List<Definition> wsdlDefs = wsdl.wsdls;
 		
-		int[][] allCounts = new int[wsdlDefs.size()][keyWordList.size()];
+		
+		int[][] allCounts = new int[keyWordList.size()][wsdlDefs.size()];
 
-		for (int i = 0; i < wsdlDefs.size(); i++) {
-			for (int j = 0; j < keyWordList.size(); j++) {
+		for (int i = 0; i < keyWordList.size(); i++) {
+			for (int j = 0; j < wsdlDefs.size(); j++) {
 
-				allCounts[i][j] = search.count(wsdlDefs.get(i).getDocumentationElement().getTextContent().toLowerCase(),
-						keyWordList.get(j).toLowerCase());
+				allCounts[i][j] = search.count(wsdlDefs.get(j).getDocumentationElement().getTextContent().toLowerCase(),
+						keyWordList.get(i).toLowerCase());
 			}
 
 		}
-		for (int i = 0; i < wsdlDefs.size(); i++) {
-			for (int j = 0; j < keyWordList.size(); j++) {
+		
+
+		
+		for (int i = 0; i < keyWordList.size(); i++) {
+			for (int j = 0; j < wsdlDefs.size(); j++) {
 
 				System.out.print(allCounts[i][j] + " ");
 
 			}
 			System.out.println();
-
 		}
 
+		
+		
+		
+		for(int i=0;i<bpmn.activityNamen.size();i++){
+			int[] posTopWsdl = search.getTopWSDL(allCounts, i);
+			System.out.println(bpmn.activityNamen.get(i)+": ");
+		if(posTopWsdl!=null){	
+		for(int a : posTopWsdl){
+			System.out.println(wsdlDefs.get(a).getDocumentBaseURI());
+		}
+		
+			
+		}else{
+			System.out.println("kein passender Webdienstgefunden");
+		}
+		System.out.println();
+		}
+		
+		
+		
 	}
 
 }
